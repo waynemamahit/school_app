@@ -1,0 +1,173 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ScheduleDay {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+}
+
+enum AbsentCategory {
+  PRESENT
+  PERMIT
+  ALPHA
+}
+
+model Role {
+  id         BigInt           @id @default(autoincrement())
+  name       String        @unique
+  created_at DateTime      @default(now())
+  updated_at DateTime      @default(now())
+  users      User[]
+  abilities  RoleAbility[]
+}
+
+model Ability {
+  id     Int           @id @default(autoincrement())
+  name   String
+  action String
+  roles  RoleAbility[]
+
+  @@unique([name, action])
+}
+
+model RoleAbility {
+  id         Int      @id @default(autoincrement())
+  ability    Ability  @relation(fields: [ability_id], references: [id], onDelete: Cascade)
+  ability_id Int
+  role       Role     @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  role_id    BigInt
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  @@unique([ability_id, role_id])
+}
+
+model School {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  address   String
+  latitude  Decimal @db.Decimal(8, 6)
+  longitude Decimal @db.Decimal(9, 6)
+  users     User[]
+  classes   Class[]
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  username   String   @unique
+  email      String   @unique
+  password   String
+  role       Role?    @relation(fields: [role_id], references: [id], onDelete: SetNull)
+  role_id    BigInt?
+  school     School?  @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  school_id  Int?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  teacher    Teacher?
+  student    Student?
+  absents    Absent[]
+}
+
+model Teacher {
+  id           Int             @id @default(autoincrement())
+  id_number    String          @unique
+  user         User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id      Int             @unique
+  created_at   DateTime        @default(now())
+  updated_at   DateTime        @default(now())
+  school_class Class?
+  courses      TeacherCourse[]
+}
+
+model Class {
+  id         Int        @id @default(autoincrement())
+  name       String
+  teacher    Teacher?   @relation(fields: [teacher_id], references: [id], onDelete: SetNull)
+  teacher_id Int?       @unique
+  school     School     @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  school_id  Int
+  created_at DateTime   @default(now())
+  updated_at DateTime   @default(now())
+  course     Course[]
+  schedules  Schedule[]
+  students   Student[]
+}
+
+model Course {
+  id             Int             @id @default(autoincrement())
+  subject_number String          @unique
+  name           String
+  curriculum     String
+  school_class   Class?          @relation(fields: [class_id], references: [id], onDelete: SetNull)
+  class_id       Int?
+  created_at     DateTime        @default(now())
+  updated_at     DateTime        @default(now())
+  schedule       Schedule[]
+  teachers       TeacherCourse[]
+}
+
+model TeacherCourse {
+  id         Int      @id @default(autoincrement())
+  summary    String?
+  course     Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  course_id  Int
+  teacher    Teacher  @relation(fields: [teacher_id], references: [id], onDelete: Cascade)
+  teacher_id Int
+  created_at DateTime @default(now())
+
+  @@unique([course_id, teacher_id])
+}
+
+model Schedule {
+  id           Int         @id @default(autoincrement())
+  day          ScheduleDay
+  semester     Int         @db.SmallInt
+  school_class Class?      @relation(fields: [class_id], references: [id], onDelete: SetNull)
+  class_id     Int?
+  course       Course      @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  course_id    Int
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @default(now())
+  Absent       Absent[]
+
+  @@unique([class_id, course_id])
+}
+
+model Student {
+  id           Int      @id @default(autoincrement())
+  id_number    String   @unique
+  school_class Class?   @relation(fields: [class_id], references: [id], onDelete: SetNull)
+  class_id     Int?
+  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id      Int      @unique
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now())
+}
+
+model Absent {
+  id          Int            @id @default(autoincrement())
+  latitude    Decimal        @db.Decimal(16, 16)
+  longitude   Decimal        @db.Decimal(16, 16)
+  category    AbsentCategory
+  schedule    Schedule       @relation(fields: [schedule_id], references: [id], onDelete: Cascade)
+  schedule_id Int
+  user        User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     Int
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @default(now())
+}

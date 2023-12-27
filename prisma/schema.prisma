@@ -27,7 +27,7 @@ enum AbsentCategory {
 }
 
 model Role {
-  id         BigInt           @id @default(autoincrement())
+  id         Int           @id @default(autoincrement())
   name       String        @unique
   created_at DateTime      @default(now())
   updated_at DateTime      @default(now())
@@ -49,7 +49,7 @@ model RoleAbility {
   ability    Ability  @relation(fields: [ability_id], references: [id], onDelete: Cascade)
   ability_id Int
   role       Role     @relation(fields: [role_id], references: [id], onDelete: Cascade)
-  role_id    BigInt
+  role_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 
@@ -73,7 +73,7 @@ model User {
   email      String   @unique
   password   String
   role       Role?    @relation(fields: [role_id], references: [id], onDelete: SetNull)
-  role_id    BigInt?
+  role_id    Int?
   school     School?  @relation(fields: [school_id], references: [id], onDelete: Cascade)
   school_id  Int?
   created_at DateTime @default(now())
@@ -103,7 +103,7 @@ model Class {
   school_id  Int
   created_at DateTime   @default(now())
   updated_at DateTime   @default(now())
-  course     Course[]
+  courses    Course[]
   schedules  Schedule[]
   students   Student[]
 }
@@ -117,7 +117,7 @@ model Course {
   class_id       Int?
   created_at     DateTime        @default(now())
   updated_at     DateTime        @default(now())
-  schedule       Schedule[]
+  schedules      Schedule[]
   teachers       TeacherCourse[]
 }
 

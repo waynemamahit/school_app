@@ -1,6 +1,6 @@
 import { Context } from 'hono';
+import { sayHelloSchemaDto } from '../../validations/auth.validation';
 import { AuthService } from '../services/auth.service';
-import { sayHelloSchemaDto } from '@/validations/auth.validation';
 
 export default class AuthController {
   service = new AuthService();
@@ -18,10 +18,10 @@ export default class AuthController {
       });
     } catch (error) {
       return c.json({
-        error
-      })
+        error,
+      });
     }
-  }
+  };
 
   sayHi = async (c: Context) =>
     c.json({

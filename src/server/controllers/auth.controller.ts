@@ -10,11 +10,18 @@ export default class AuthController {
       message: this.service.getHello(),
     });
 
-  sayHello = async (c: Context) =>
-    c.json({
-      data: await sayHelloSchemaDto.parseAsync(await c.req.json()),
-      message: this.service.getHello(),
-    });
+  sayHello = async (c: Context) => {
+    try {
+      return c.json({
+        data: await sayHelloSchemaDto.parseAsync(await c.req.json()),
+        message: this.service.getHello(),
+      });
+    } catch (error) {
+      return c.json({
+        error
+      })
+    }
+  }
 
   sayHi = async (c: Context) =>
     c.json({

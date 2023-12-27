@@ -6,7 +6,7 @@ CREATE TYPE "AbsentCategory" AS ENUM ('PRESENT', 'PERMIT', 'ALPHA');
 
 -- CreateTable
 CREATE TABLE "Role" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -27,7 +27,7 @@ CREATE TABLE "Ability" (
 CREATE TABLE "RoleAbility" (
     "id" SERIAL NOT NULL,
     "ability_id" INTEGER NOT NULL,
-    "role_id" BIGINT NOT NULL,
+    "role_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -52,7 +52,7 @@ CREATE TABLE "User" (
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role_id" BIGINT,
+    "role_id" INTEGER,
     "school_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

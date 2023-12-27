@@ -19,7 +19,7 @@ export default class AuthController {
     } catch (error) {
       return c.json({
         error,
-      });
+      }, 400);
     }
   };
 

@@ -8,15 +8,6 @@ export const runtime = 'edge';
 const app = new Hono().basePath('/api/v1');
 
 app.use(cors());
-app.use('*', async (c, next) => {
-  try {
-    await next();
-  } catch (error) {
-    return c.json({
-      error,
-    });
-  }
-});
 
 app.route('/auth', authRoute);
 

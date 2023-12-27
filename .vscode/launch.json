@@ -10,6 +10,13 @@
       "request": "launch",
       "command": "npm run dev",
       "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "node-terminal",
+      "name": "Debug Test",
+      "request": "launch",
+      "command": "npm run test",
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

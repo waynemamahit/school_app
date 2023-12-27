@@ -1,5 +1,6 @@
 import { Context } from 'hono';
 import { AuthService } from '../services/auth.service';
+import { sayHelloSchemaDto } from '@/validations/auth.validation';
 
 export default class AuthController {
   service = new AuthService();
@@ -11,7 +12,7 @@ export default class AuthController {
 
   sayHello = async (c: Context) =>
     c.json({
-      data: await c.req.raw.json(),
+      data: await sayHelloSchemaDto.parseAsync(await c.req.json()),
       message: this.service.getHello(),
     });
 

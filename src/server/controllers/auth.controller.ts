@@ -1,5 +1,4 @@
 import { Context } from 'hono';
-import { sayHelloSchemaDto } from '../../validations/auth.validation';
 import { AuthService } from '../services/auth.service';
 
 export default class AuthController {
@@ -10,18 +9,11 @@ export default class AuthController {
       message: this.service.getHello(),
     });
 
-  sayHello = async (c: Context) => {
-    try {
-      return c.json({
-        data: await sayHelloSchemaDto.parseAsync(await c.req.json()),
-        message: this.service.getHello(),
-      });
-    } catch (error) {
-      return c.json({
-        error,
-      }, 400);
-    }
-  };
+  sayHello = async (c: Context) =>
+    c.json({
+      data: c.get('dto'),
+      message: this.service.getHello(),
+    });
 
   sayHi = async (c: Context) =>
     c.json({

@@ -18,12 +18,12 @@ describe('Auth Features', () => {
     expect(response.status).toBe(200);
     expect(await getMessage(response)).toBe('Hello!');
   });
-  
+
   it('should not be say hello', async () => {
     const response = await auth.sayHello({});
     expect(response.status).toBe(400);
   });
-  
+
   it('should be say hi', async () => {
     const response = await auth.sayHi();
     expect(response.status).toBe(200);

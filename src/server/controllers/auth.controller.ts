@@ -26,6 +26,6 @@ export default class AuthController {
   sayHi = async (c: Context) =>
     c.json({
       message: 'Hi!',
-      data: await c.req.raw.json(),
+      data: await c.req.json(),
     });
 }

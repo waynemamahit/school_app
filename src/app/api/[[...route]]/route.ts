@@ -1,13 +1,17 @@
 import authRoute from '@/server/routes/auth.route';
 import { Hono } from 'hono';
-import { handle } from 'hono/vercel';
 import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
+import { secureHeaders } from 'hono/secure-headers';
+import { handle } from 'hono/vercel';
 
 export const runtime = 'edge';
 
 const app = new Hono().basePath('/api/v1');
 
 app.use(cors());
+app.use(secureHeaders());
+app.use(logger());
 
 app.route('/auth', authRoute);
 

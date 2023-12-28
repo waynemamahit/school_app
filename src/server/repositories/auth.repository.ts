@@ -1,3 +1,3 @@
 export class AuthRepository {
-  message = 'hello';
+  message = 'Hello!';
 }

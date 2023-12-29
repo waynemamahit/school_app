@@ -1,3 +1,4 @@
+import { SayHelloDto } from '@/validations/auth.validation';
 import { Context } from 'hono';
 import { AuthService } from '../services/auth.service';
 
@@ -11,7 +12,7 @@ export default class AuthController {
 
   sayHello = async (c: Context) =>
     c.json({
-      data: c.get('dto'),
+      data: c.get('dto') as SayHelloDto,
       message: this.service.getHello(),
     });
 

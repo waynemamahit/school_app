@@ -12,8 +12,8 @@ export const runtime = 'edge';
 
 const app = new Hono().basePath('/api/v1');
 const rateLimiter = new RateLimiterMemory({
-  points: 20,
-  duration: 10,
+  points: 100,
+  duration: 60,
 });
 
 app.use('*', cors());

@@ -81,6 +81,7 @@ model User {
   teacher    Teacher?
   student    Student?
   absents    Absent[]
+  ratings    Rating[]
 }
 
 model Teacher {
@@ -119,6 +120,7 @@ model Course {
   updated_at     DateTime        @default(now())
   schedules      Schedule[]
   teachers       TeacherCourse[]
+  ratings        Rating[]
 }
 
 model TeacherCourse {
@@ -170,4 +172,17 @@ model Absent {
   user_id     Int
   created_at  DateTime       @default(now())
   updated_at  DateTime       @default(now())
+}
+
+model Rating {
+  id          Int      @id @default(autoincrement())
+  description String?
+  value       Float
+  is_success  Boolean
+  course      Course?  @relation(fields: [course_id], references: [id], onDelete: SetNull)
+  course_id   Int?
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
 }
